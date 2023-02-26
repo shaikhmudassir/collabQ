@@ -1,0 +1,75 @@
+
+{% extends "main/base.html" %}
+
+{% block title %}  collabQ  {% endblock %}
+
+{% block body %}
+
+
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div class="mb-5 mx-auto max-w-2xl text-center">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            <a href="{% url 'main:home'%}" class="text-white bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:focus:ring-indigo-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Back To Home</a>
+            <a href="{% url 'main:dashboard'%}" class="text-white bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:focus:ring-indigo-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Dashboard</a>
+            <a href="{% url 'main:logout'%}" class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Logout</a>
+        </div>
+    </div>
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Created At</th>
+                <th scope="col" class="px-6 py-3">Title</th>
+                <th scope="col" class="px-6 py-3">Description</th>
+                <th scope="col" class="px-6 py-3">Complexity</th>
+                <th scope="col" class="px-6 py-3">raised_by</th>
+                <th scope="col" class="px-6 py-3">Status</th>
+                <th scope="col" class="px-6 py-3">deadline</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in issues %}
+            <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{ i.created_at }}
+                </th>
+                <td class="px-6 py-4">{{ i.title }}</td>
+                <td class="px-6 py-4">{{ i.message }}</td>
+                <td class="px-6 py-4">
+                    {% if i.complexity == 1 %}
+                    <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">Simple</span>
+                    {% elif i.complexity == 2 %}
+                    <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Moderate</span>
+                    {% elif i.complexity == 3 %}
+                    <span class="bg-purple-100 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-purple-900 dark:text-purple-300">High</span>
+                    {% elif i.complexity == 4 %}
+                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Advanced</span>
+                    {% elif i.complexity == 5 %}
+                    <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Extreme</span>
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4">{{ i.raised_by.first_name }} {{i.raised_by.last_name }}</td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center">
+                        {% if i.status == 1 %}
+                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Open
+                        {% elif i.status == 2 %}
+                        <div class="h-2.5 w-2.5 rounded-full bg-yellow-500 mr-2"></div> Picked
+                        {% elif i.status == 3 %}
+                        <div class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></div> Completed
+                        {% endif %}
+                    </div>
+                </td>
+                <td class="px-6 py-4">{{ i.deadline }}</td>
+                <td class="px-6 py-4">
+                    {% if i.status == 1 %}
+                    <a href="{% url 'main:assign'%}?picked={{ i.id }}" class="text-gray-900 bg-gradient-to-r from-lime-200 via-lime-200 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 shadow-lg shadow-lime-500/50 dark:shadow-lg dark:shadow-lime-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" >Choose</a>
+                    {% else %}
+                    <a href="#" class="text-gray-900 bg-gradient-to-r from-gray-200 via-gray-200 to-gray-500 hover:bg-gradient-to-br font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Mak</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
